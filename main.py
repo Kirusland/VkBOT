@@ -52,13 +52,6 @@ for event in VkLongPoll(func.sessiongroup).listen():
                         status = func.get_user_status(arg)
                         func.send_message_by_peer_id(status, chat_id)
 
-                    # elif prefix == '!добавить':
-                    #     func.add_user_by_id(chat_id, arg)
-
-                    # elif prefix == 'игнор':
-                    #     добавление в .txt или в .db id пользователя
-                    #     реализация проверки наличия пользователя в файле
-
                     else:
                         func.send_message_by_peer_id(f"Команда не найдена, чтобы вывести список команд, напишите: !help",
                                                      chat_id)
