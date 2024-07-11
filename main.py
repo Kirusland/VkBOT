@@ -5,6 +5,7 @@ from datetime import datetime
 
 for event in VkLongPoll(func.sessiongroup).listen():
     if event.type == VkEventType.MESSAGE_NEW and event.to_me:
+        time_=event.raw[4]
         func.set_user_status(f"VK API Кодер❤️ Последний заход в сеть: {datetime.now()}")
         text = event.text.lower()
         if text[0] == '!':
@@ -30,8 +31,16 @@ for event in VkLongPoll(func.sessiongroup).listen():
                 try:
                     arg = int(arg)
                 except ValueError:
-                    func.send_message_by_peer_id(f"Аргумент команды не является числом, напишите: !help",
-                                                 chat_id)
+                    if (prefix == '!реши'):
+                        try:
+                            msg = eval(arg)
+                            func.send_message_by_peer_id(msg, chat_id)
+                        except ZeroDivisionError:
+                            func.send_message_by_peer_id("Нельзя делить на ноль!", chat_id)
+                            continue
+                    else:
+                        func.send_message_by_peer_id(f"Аргумент команды не является числом, напишите: !help",
+                                                     chat_id)
                     continue
 
 
@@ -51,7 +60,7 @@ for event in VkLongPoll(func.sessiongroup).listen():
                     elif prefix == '!статус':
                         status = func.get_user_status(arg)
                         func.send_message_by_peer_id(status, chat_id)
-
+                        
                     else:
                         func.send_message_by_peer_id(f"Команда не найдена, чтобы вывести список команд, напишите: !help",
                                                      chat_id)
@@ -69,14 +78,19 @@ for event in VkLongPoll(func.sessiongroup).listen():
                         func.send_message_by_peer_id(f"Онлайн: {online_friends}", chat_id)
                     print(online_friends)
 
+                elif text == '!ping' or text == '!пинг':
+                    ping=f'Пинг: {abs(round(datetime.now().timestamp()-time_, 3))} сек.'
+                    func.send_message_by_peer_id(ping, chat_id)
+                    print(ping)
+
                 elif text == '!помощь' or text == '!help':
                     func.send_message_by_peer_id(
-                        f"Команды:\n\nдрузья <id> - добавить пользователя в друзья"
-                        f"\nинфо <id> - получить информацию о пользователе"
-                        f"\nстатус <id> - получить статус пользователя"
-                        f"\nстатус - получить статус текущего пользователя"
-                        f"\nонлайн - получить список друзей текущего пользователя онлайн"
-                        f"\nпомощь или !help - вывести это сообщение",
+                        f"Команды:\n\n!друзья <id> - добавить пользователя в друзья"
+                        f"\n!инфо <id> - получить информацию о пользователе"
+                        f"\n!статус <id> - получить статус пользователя"
+                        f"\n!статус - получить статус текущего пользователя"
+                        f"\n!онлайн - получить список друзей текущего пользователя онлайн"
+                        f"\n!помощь или !help - вывести это сообщение",
                         chat_id)
                 else:
                     func.send_message_by_peer_id(f"Команда не найдена. Чтобы вывести список команд, напишите: !help", chat_id)
