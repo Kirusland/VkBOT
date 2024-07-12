@@ -47,19 +47,25 @@ def add_friend_by_id(user_id, chat_id):
         send_message_by_peer_id(e, chat_id)
         print(e)
 
-# def send_message_by_chat_id(message, chat_id):
-#     vkgroup.messages.send(
-#                     random_id=0,
-#                     chat_id=chat_id,
-#                     message=message
-#                     )
+def send_message_by_peer_id(message, peer_id):
+    vkgroup.messages.send(
+                    random_id=0,
+                    peer_id = peer_id,
+                    message=message
+                    )
 
-def send_message_by_peer_id(message, chat_id):
+def send_message_by_chat_id(message, chat_id):
     vkgroup.messages.send(
         random_id=0,
         chat_id=chat_id,
         message=message
     )
+
+def ban_user_by_id(user_id):
+    vk.account.ban(user_id=user_id)
+
+def unban_user_by_id(user_id):
+    vk.account.unban(user_id=user_id)
 
 def delete_message_4all_by_id(id, peer_id):
     vk.messages.delete(cmids=id, peer_id = peer_id, delete_for_all=True)
